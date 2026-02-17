@@ -1,0 +1,65 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Handcrafted wooden pieces, made with care" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <style is:global>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --wood-brown: #8B4513;
+        --dark-wood: #3E2723;
+        --light-bg: #FFF8F0;
+        --text: #2C2C2C;
+        --light-text: #666;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        line-height: 1.6;
+        color: var(--text);
+        background: var(--light-bg);
+      }
+
+      h1, h2, h3 {
+        font-weight: 600;
+        color: var(--dark-wood);
+      }
+
+      a {
+        color: var(--wood-brown);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

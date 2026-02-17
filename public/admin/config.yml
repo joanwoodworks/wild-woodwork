@@ -1,0 +1,44 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# For local development
+local_backend: true
+
+media_folder: "public/images/products"
+public_folder: "/images/products"
+
+collections:
+  # Products collection
+  - name: "products"
+    label: "Products"
+    folder: "src/content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Price", name: "price", widget: "string", required: false, hint: "e.g., $250 or Contact for price"}
+      - {label: "Main Image", name: "image", widget: "image"}
+      - {label: "Gallery Images", name: "gallery", widget: "list", required: false, field: {label: "Image", name: "image", widget: "image"}}
+      - {label: "Dimensions", name: "dimensions", widget: "string", required: false}
+      - {label: "Wood Type", name: "wood", widget: "string", required: false}
+      - {label: "Featured", name: "featured", widget: "boolean", default: false}
+      - {label: "Available", name: "available", widget: "boolean", default: true}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+
+  # Site settings
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "General Settings"
+        name: "general"
+        file: "src/content/settings/general.json"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string", default: "Wild Woodwork"}
+          - {label: "Tagline", name: "tagline", widget: "string"}
+          - {label: "About", name: "about", widget: "text"}
+          - {label: "Contact Email", name: "email", widget: "string"}
+          - {label: "Phone", name: "phone", widget: "string", required: false}
+          - {label: "Instagram Handle", name: "instagram", widget: "string", default: "@wild.woodwork"}
+          - {label: "Instagram URL", name: "instagram_url", widget: "string", default: "https://www.instagram.com/wild.woodwork/"}
