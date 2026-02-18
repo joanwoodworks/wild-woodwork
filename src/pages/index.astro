@@ -17,6 +17,9 @@ const productsByCategory = products.reduce((acc, product) => {
 }, {} as Record<string, typeof products>);
 
 const categories = Object.keys(productsByCategory);
+
+// Create global product index for alternating layout
+let globalProductIndex = 0;
 ---
 
 <Layout title={settings.title} description={settings.tagline}>
@@ -51,31 +54,37 @@ const categories = Object.keys(productsByCategory);
   {categories.map((category) => (
     <section class="product-section" id={category.toLowerCase().replace(/\s+/g, '-')}>
       <h2 class="category-title">{category}</h2>
-      {productsByCategory[category].map((product, index) => (
-        <div class="product" data-index={index}>
-          <div class="product-content">
-            <div class="product-text" data-speed="0.8">
-              <h3 class="product-title">{product.data.title}</h3>
-              <p class="product-description">{product.data.description}</p>
-              {product.data.wood && <p class="product-meta">Wood: {product.data.wood}</p>}
-              {product.data.dimensions && <p class="product-meta">Size: {product.data.dimensions}</p>}
-              {product.data.price && <p class="product-price">{product.data.price}</p>}
-            </div>
-            <div class="product-images" data-speed="1.2">
-              {product.data.image && (
-                <div class="product-image">
-                  <img src={product.data.image} alt={product.data.title} loading="lazy" />
+      {productsByCategory[category].map((product) => {
+        const isEven = globalProductIndex % 2 === 0;
+        globalProductIndex++;
+        return (
+          <div class="product" data-reverse={!isEven}>
+            <div class="product-content">
+              <div class="product-text-container">
+                <h3 class="product-title">{product.data.title}</h3>
+                <div class="product-text" data-speed="0.8">
+                  <p class="product-description">{product.data.description}</p>
+                  {product.data.wood && <p class="product-meta">Wood: {product.data.wood}</p>}
+                  {product.data.dimensions && <p class="product-meta">Size: {product.data.dimensions}</p>}
+                  {product.data.price && <p class="product-price">{product.data.price}</p>}
                 </div>
-              )}
-              {product.data.gallery?.map((img) => (
-                <div class="product-image">
-                  <img src={img.image} alt={product.data.title} loading="lazy" />
-                </div>
-              ))}
+              </div>
+              <div class="product-images" data-speed="1.2">
+                {product.data.image && (
+                  <div class="product-image">
+                    <img src={product.data.image} alt={product.data.title} loading="lazy" />
+                  </div>
+                )}
+                {product.data.gallery?.map((img) => (
+                  <div class="product-image">
+                    <img src={img.image} alt={product.data.title} loading="lazy" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </section>
   ))}
 
@@ -247,16 +256,16 @@ const categories = Object.keys(productsByCategory);
     align-items: start;
   }
 
-  .product:nth-child(even) .product-content {
+  .product[data-reverse="true"] .product-content {
     direction: rtl;
   }
 
-  .product:nth-child(even) .product-text,
-  .product:nth-child(even) .product-images {
+  .product[data-reverse="true"] .product-text-container,
+  .product[data-reverse="true"] .product-images {
     direction: ltr;
   }
 
-  .product-text {
+  .product-text-container {
     position: sticky;
     top: 150px;
   }
@@ -388,24 +397,36 @@ const categories = Object.keys(productsByCategory);
 
     .product-content {
       grid-template-columns: 1fr;
-      gap: 3rem;
+      gap: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .product:nth-child(even) .product-content {
+    .product[data-reverse="true"] .product-content {
       direction: ltr;
     }
 
-    .product-text {
+    .product-text-container {
       position: sticky;
-      top: 100px;
+      top: 80px;
       background: white;
-      padding: 2rem 0;
       z-index: 10;
-      margin-bottom: -2rem;
+      padding-bottom: 2rem;
+    }
+
+    .product-title {
+      background: white;
+      margin-bottom: 1rem;
+      padding-top: 1rem;
+    }
+
+    .product-text {
+      position: relative;
     }
 
     .product-images {
       gap: 2rem;
+      margin-top: 3rem;
     }
 
     .category-title {
@@ -469,8 +490,11 @@ const categories = Object.keys(productsByCategory);
     });
   });
 
-  // Parallax effect for products
+  // Parallax effect for products (desktop only)
   function handleParallax() {
+    // Disable parallax on mobile
+    if (window.innerWidth <= 768) return;
+
     const products = document.querySelectorAll('.product');
 
     products.forEach(product => {
@@ -493,6 +517,7 @@ const categories = Object.keys(productsByCategory);
   }
 
   window.addEventListener('scroll', handleParallax);
+  window.addEventListener('resize', handleParallax);
   handleParallax(); // Initial call
 </script>
 </Layout>
