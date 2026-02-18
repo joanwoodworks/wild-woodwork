@@ -1,6 +1,7 @@
 /**
- * CloudFlare Worker for GitHub OAuth with Decap CMS
- * Handles OAuth flow between Decap CMS and GitHub
+ * CloudFlare Worker for Decap CMS GitHub OAuth
+ * Implements proper Decap OAuth protocol with state/origin handling
+ * Based on: https://github.com/i40west/netlify-cms-oauth-provider-go
  */
 
 export default {
@@ -19,12 +20,31 @@ export default {
     }
 
     // OAuth initiation - redirect to GitHub
+    // Decap passes: ?provider=github&origin=<cms-origin>&state=<random>
     if (url.pathname === '/auth') {
+      const provider = url.searchParams.get('provider') || 'github';
+      const origin = url.searchParams.get('origin');
+
+      if (provider !== 'github') {
+        return new Response('Only GitHub provider is supported', { status: 400 });
+      }
+
+      // Generate state that includes origin for roundtrip
+      const state = JSON.stringify({
+        origin: origin,
+        csrf: crypto.randomUUID(),
+      });
+      const stateParam = btoa(state);
+
       const clientId = env.GITHUB_CLIENT_ID;
       const redirectUri = `${url.origin}/callback`;
       const scope = 'repo,user';
 
-      const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+      const githubAuthUrl = `https://github.com/login/oauth/authorize?` +
+        `client_id=${clientId}` +
+        `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+        `&scope=${scope}` +
+        `&state=${stateParam}`;
 
       return Response.redirect(githubAuthUrl, 302);
     }
@@ -32,9 +52,19 @@ export default {
     // OAuth callback - exchange code for token
     if (url.pathname === '/callback') {
       const code = url.searchParams.get('code');
+      const stateParam = url.searchParams.get('state');
 
       if (!code) {
         return new Response('No code provided', { status: 400 });
+      }
+
+      // Decode state to get origin
+      let origin = '*';
+      try {
+        const state = JSON.parse(atob(stateParam));
+        origin = state.origin || '*';
+      } catch (e) {
+        console.error('Failed to parse state:', e);
       }
 
       // Exchange code for access token
@@ -57,7 +87,11 @@ export default {
         return new Response(`GitHub OAuth error: ${tokenData.error_description}`, { status: 400 });
       }
 
-      // Return success page that sends token back to CMS
+      // Return success page that posts message to the correct origin
+      const token = tokenData.access_token;
+      const escapedToken = token.replace(/'/g, "\\'");
+      const escapedOrigin = origin.replace(/'/g, "\\'");
+
       const html = `
         <!DOCTYPE html>
         <html>
@@ -90,31 +124,27 @@ export default {
           </div>
           <script>
             (function() {
-              function receiveMessage(e) {
-                console.log("Received message:", e);
-                window.opener.postMessage(
-                  'authorization:github:success:${JSON.stringify({
-                    token: tokenData.access_token,
-                    provider: 'github'
-                  })}',
-                  e.origin
-                );
-                window.removeEventListener("message", receiveMessage, false);
-              }
-              window.addEventListener("message", receiveMessage, false);
-
-              console.log("Posting message:", ${JSON.stringify(tokenData)});
-              window.opener.postMessage(
-                'authorization:github:success:${JSON.stringify({
-                  token: tokenData.access_token,
+              function postAuthMessage() {
+                var message = 'authorization:github:success:' + JSON.stringify({
+                  token: '${escapedToken}',
                   provider: 'github'
-                })}',
-                window.location.origin
-              );
+                });
 
-              setTimeout(function() {
-                window.close();
-              }, 1000);
+                console.log('Posting message to origin:', '${escapedOrigin}');
+                console.log('Message:', message);
+
+                if (window.opener) {
+                  window.opener.postMessage(message, '${escapedOrigin}');
+                  setTimeout(function() {
+                    window.close();
+                  }, 1000);
+                } else {
+                  console.error('No window.opener available');
+                  document.body.innerHTML = '<div class="container"><h1>⚠️ Error</h1><p>Unable to communicate with CMS. Please close this window.</p></div>';
+                }
+              }
+
+              postAuthMessage();
             })();
           </script>
         </body>
@@ -124,11 +154,13 @@ export default {
       return new Response(html, {
         headers: {
           'Content-Type': 'text/html',
-          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache',
         },
       });
     }
 
-    return new Response('Not Found', { status: 404 });
+    return new Response('Decap CMS OAuth Provider\n\nEndpoints:\n- /auth?provider=github&origin=<origin>\n- /callback', {
+      headers: { 'Content-Type': 'text/plain' },
+    });
   },
 };
