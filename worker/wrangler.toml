@@ -1,0 +1,10 @@
+name = "wildwoodwork-oauth"
+main = "oauth.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables (secrets) - set these via wrangler CLI
+# wrangler secret put GITHUB_CLIENT_ID
+# wrangler secret put GITHUB_CLIENT_SECRET
+
+[vars]
+# Non-secret variables can go here

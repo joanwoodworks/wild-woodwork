@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: joanwoodworks/wild-woodwork
   branch: main
+  base_url: https://wildwoodwork-oauth.joanwoodworks.workers.dev
+  auth_endpoint: /auth
 
 media_folder: "public/images/products"
 public_folder: "/images/products"
