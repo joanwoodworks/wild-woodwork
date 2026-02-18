@@ -1,10 +1,12 @@
 ---
-title: "Handcrafted Walnut Cutting Board"
-description: "Beautiful end-grain cutting board made from premium black walnut. Perfect for food prep and serving. Each piece is unique with its own grain pattern."
-price: "$125"
-image: "/images/products/walnut-board.jpg"
-dimensions: "18\" x 12\" x 1.5\""
-wood: "Black Walnut"
+title: Handcrafted Walnut Cutting Board
+description: Beautiful end-grain cutting board made from premium black walnut.
+  Perfect for food prep and serving. Each piece is unique with its own grain
+  pattern. Testtest
+price: $125
+image: /images/products/walnut-board.jpg
+dimensions: 18" x 12" x 1.5"
+wood: Black Walnut
 featured: true
 available: true
 date: 2026-02-17
