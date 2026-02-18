@@ -17,6 +17,7 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Cutting Boards", "Chairs", "Tables", "Decor", "Other"], default: "Other"}
       - {label: "Description", name: "description", widget: "text"}
       - {label: "Price", name: "price", widget: "string", required: false, hint: "e.g., $250 or Contact for price"}
       - {label: "Main Image", name: "image", widget: "image"}
@@ -36,6 +37,7 @@ collections:
         file: "src/content/settings/general.json"
         fields:
           - {label: "Site Title", name: "title", widget: "string", default: "Wild Woodwork"}
+          - {label: "Hero Image", name: "hero_image", widget: "image", hint: "Fullscreen image shown on page load"}
           - {label: "Tagline", name: "tagline", widget: "string"}
           - {label: "About", name: "about", widget: "text"}
           - {label: "Contact Email", name: "email", widget: "string"}

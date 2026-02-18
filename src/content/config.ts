@@ -4,6 +4,7 @@ const products = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
+    category: z.enum(['Cutting Boards', 'Chairs', 'Tables', 'Decor', 'Other']).default('Other'),
     description: z.string(),
     price: z.string().optional(),
     image: z.string(),

@@ -1,5 +1,6 @@
 ---
 title: "White Oak Serving Tray"
+category: "Decor"
 description: "Elegant serving tray with handles, perfect for entertaining. Made from sustainable white oak with a natural finish."
 price: "$85"
 image: "/images/products/oak-tray.jpg"

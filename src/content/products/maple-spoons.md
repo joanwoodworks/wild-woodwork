@@ -1,5 +1,6 @@
 ---
 title: "Hand-Carved Maple Spoon Set"
+category: "Other"
 description: "Set of three hand-carved cooking spoons made from hard maple. Each spoon is unique and finished with food-safe oil."
 price: "$45"
 image: "/images/products/maple-spoons.jpg"
