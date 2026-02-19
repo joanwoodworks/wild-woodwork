@@ -1,9 +1,15 @@
 ---
 title: Köögilahendus
 category: Köök
-description: Unikaalne ja täielikult kohandatud funktsionaalne köögilahendus, mis ühendab endas kaasaegse disaini, praktilisuse ja looduslike materjalide soojuse. Valmistatud kvaliteetsest massiivsest puidust, dilma integreeritud LED-valgustusega, mis loob meeldiva ja atmosfääri köögis. Iga detail on hoolikalt kavandatud ja käsitsi valmistatud, rõhutades puidu loomulikku ilu ja tekstuuri. Lahendus on loodud vastama nii esteetiliste kui ka funktsionaalsete vajaduste, pakkudes pikaajalise ja kasutamismugavust.
+description: Unikaalne ja täielikult kohandatud funktsionaalne köögilahendus,
+  mis ühendab endas kaasaegse disaini, praktilisuse ja looduslike materjalide
+  soojuse. Valmistatud kvaliteetsest massiivsest puidust, dilma integreeritud
+  LED-valgustusega, mis loob meeldiva ja atmosfääri köögis. Iga detail on
+  hoolikalt kavandatud ja käsitsi valmistatud, rõhutades puidu loomulikku ilu ja
+  tekstuuri. Lahendus on loodud vastama nii esteetiliste kui ka funktsionaalsete
+  vajaduste, pakkudes pikaajalise ja kasutamismugavust.
+price: Küsi hinda
 image: /images/products/z940oartghty4ogzhcvhnll0pyvtvevzqdkfrcegy3rbjfau0kjxlova0srwwrk7.jpeg
-price: Hinna küsi
 featured: false
 available: true
 date: 2026-02-19T22:25:00.000+02:00
