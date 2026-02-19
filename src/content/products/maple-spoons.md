@@ -3,13 +3,13 @@ title: Lõikelaud Oskar
 category: Lõikelaud
 description: Kahest erinevast tammest kokku pandud "end-grain" lõikelaud. Koos
   mahlarenni. Kaalub 2kg. Käsitöö. Mehine
-price: $75
+price: 75€
 image: /images/products/img_8609.jpg
 gallery:
   - /images/products/img_8610.jpg
   - /images/products/img_8611.jpg
-dimensions: 12" length
-wood: Hard Maple
+dimensions: 40 cm x 25 cm
+wood: ""
 featured: true
 available: true
 date: 2026-02-15
