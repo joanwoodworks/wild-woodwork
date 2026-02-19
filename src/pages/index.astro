@@ -406,7 +406,7 @@ let globalProductIndex = 0;
 
     .product-content {
       grid-template-columns: 1fr;
-      gap: 8rem;
+      gap: 2rem;
       display: flex;
       flex-direction: column;
     }
@@ -417,6 +417,8 @@ let globalProductIndex = 0;
 
     .product-text-container {
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     .product-title {
@@ -429,10 +431,13 @@ let globalProductIndex = 0;
       margin-bottom: 1rem;
       width: 100vw;
       margin-left: -2rem;
+      flex-shrink: 0;
     }
 
     .product-text {
       position: relative;
+      padding-bottom: 3rem;
+      flex-shrink: 0;
     }
 
     .product-images {
