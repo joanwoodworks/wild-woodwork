@@ -1,11 +1,15 @@
 ---
-title: "Hand-Carved Maple Spoon Set"
-category: "Other"
-description: "Set of three hand-carved cooking spoons made from hard maple. Each spoon is unique and finished with food-safe oil."
-price: "$45"
-image: "/images/products/maple-spoons.jpg"
-dimensions: "12\" length"
-wood: "Hard Maple"
+title: Lõikelaud Oskar
+category: Lõikelaud
+description: Kahest erinevast tammest kokku pandud "end-grain" lõikelaud. Koos
+  mahlarenni. Kaalub 2kg. Käsitöö. Mehine
+price: $75
+image: /images/products/img_8609.jpg
+gallery:
+  - /images/products/img_8610.jpg
+  - /images/products/img_8611.jpg
+dimensions: 12" length
+wood: Hard Maple
 featured: true
 available: true
 date: 2026-02-15
