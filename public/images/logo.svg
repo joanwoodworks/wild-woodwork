@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <g stroke="#D4AF69" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Tree trunk -->
+    <line x1="100" y1="160" x2="100" y2="90" />
+    <!-- Ground line -->
+    <line x1="60" y1="160" x2="140" y1="160" />
+    <!-- Large crown (left side) -->
+    <path d="M 100 50 Q 70 60 65 85 Q 65 110 85 120 Q 95 125 100 125" fill="none" />
+    <!-- Small crown (right side) -->
+    <path d="M 100 80 Q 115 85 120 100 Q 120 115 110 125 Q 105 128 100 128" fill="none" />
+    <!-- Branch -->
+    <line x1="100" y1="100" x2="120" y2="110" />
+  </g>
+</svg>
