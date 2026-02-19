@@ -423,16 +423,18 @@ let globalProductIndex = 0;
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
       z-index: 1500;
+      pointer-events: none;
     }
 
     .menu-backdrop.active {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
     }
 
     .product-content {
       grid-template-columns: 1fr;
-      gap: 5rem;
+      gap: 0;
       display: flex;
       flex-direction: column;
       isolation: isolate;
@@ -445,6 +447,7 @@ let globalProductIndex = 0;
 
     .product-text-container {
       position: relative;
+      padding: 2rem 0;
     }
 
     .product-title-desktop {
@@ -459,7 +462,7 @@ let globalProductIndex = 0;
       color: var(--color-bg-dark);
       z-index: 100;
       padding: 1rem 2rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0;
       width: 100vw;
       margin-left: -2rem;
       font-size: clamp(2rem, 4vw, 3rem);
