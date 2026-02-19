@@ -388,6 +388,8 @@ let globalProductIndex = 0;
   @media (max-width: 768px) {
     .burger {
       display: flex;
+      z-index: 2001;
+      position: relative;
     }
 
     .nav-menu {
@@ -403,10 +405,29 @@ let globalProductIndex = 0;
       gap: 2rem;
       transition: right 0.3s ease;
       box-shadow: -2px 0 20px rgba(0,0,0,0.5);
+      z-index: 2000;
     }
 
     .nav-menu.active {
       right: 0;
+    }
+
+    .menu-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 1500;
+    }
+
+    .menu-backdrop.active {
+      opacity: 1;
+      visibility: visible;
     }
 
     .product-content {
@@ -433,7 +454,7 @@ let globalProductIndex = 0;
     .product-title-mobile {
       display: block;
       position: sticky;
-      top: 0;
+      top: 72px;
       background: var(--color-gold);
       color: var(--color-bg-dark);
       z-index: 100;
@@ -510,16 +531,40 @@ let globalProductIndex = 0;
   const burger = document.getElementById('burger');
   const navMenu = document.getElementById('nav-menu');
 
+  // Create backdrop element
+  const backdrop = document.createElement('div');
+  backdrop.className = 'menu-backdrop';
+  document.body.appendChild(backdrop);
+
+  function toggleMenu(show?: boolean) {
+    const shouldShow = show !== undefined ? show : !burger?.classList.contains('active');
+
+    if (shouldShow) {
+      burger?.classList.add('active');
+      navMenu?.classList.add('active');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      burger?.classList.remove('active');
+      navMenu?.classList.remove('active');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
   burger?.addEventListener('click', () => {
-    burger.classList.toggle('active');
-    navMenu?.classList.toggle('active');
+    toggleMenu();
+  });
+
+  // Close menu when clicking backdrop
+  backdrop.addEventListener('click', () => {
+    toggleMenu(false);
   });
 
   // Close menu when clicking a link
   navMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-      burger?.classList.remove('active');
-      navMenu?.classList.remove('active');
+      toggleMenu(false);
     });
   });
 
