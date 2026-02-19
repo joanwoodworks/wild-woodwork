@@ -146,16 +146,16 @@ let globalProductIndex = 0;
   /* Navigation */
   .main-nav {
     position: sticky;
-    top: -100%;
+    transform: translateY(-100%);
     background: rgba(28, 58, 45, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
-    transition: top 0.3s ease;
+    transition: transform 0.3s ease;
     box-shadow: 0 2px 20px rgba(0,0,0,0.3);
   }
 
   .main-nav.visible {
-    top: 0;
+    transform: translateY(0);
   }
 
   .nav-container {
@@ -238,6 +238,7 @@ let globalProductIndex = 0;
   .product-section {
     min-height: 100vh;
     padding: 8rem 2rem;
+    margin-top: -72px;
   }
 
   .category-title {
@@ -383,6 +384,27 @@ let globalProductIndex = 0;
     border-bottom-color: var(--color-gold);
   }
 
+  /* Backdrop for mobile menu */
+  :global(.menu-backdrop) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1500;
+    pointer-events: none;
+  }
+
+  :global(.menu-backdrop.active) {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
   /* Mobile Styles */
   @media (max-width: 768px) {
     .burger {
@@ -409,26 +431,6 @@ let globalProductIndex = 0;
 
     .nav-menu.active {
       right: 0;
-    }
-
-    .menu-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 1500;
-      pointer-events: none;
-    }
-
-    .menu-backdrop.active {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
     }
 
     .product-content {
@@ -483,7 +485,6 @@ let globalProductIndex = 0;
     .product-image {
       width: 100vw;
       margin-left: -2rem;
-      margin-bottom: 1.5rem;
     }
 
     .product-image img {
@@ -514,6 +515,8 @@ let globalProductIndex = 0;
   const nav = document.getElementById('main-nav');
   const navLogo = document.querySelector('.nav-logo') as HTMLAnchorElement;
   const hero = document.getElementById('hero');
+  const firstProductSection = document.querySelector('.product-section') as HTMLElement;
+  const firstProductId = firstProductSection?.id || 'hero';
   let lastScroll = 0;
 
   window.addEventListener('scroll', () => {
@@ -525,7 +528,7 @@ let globalProductIndex = 0;
       if (navLogo) navLogo.href = '#about';
     } else {
       nav?.classList.remove('visible');
-      if (navLogo) navLogo.href = '#hero';
+      if (navLogo) navLogo.href = `#${firstProductId}`;
     }
 
     lastScroll = currentScroll;
