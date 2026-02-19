@@ -409,6 +409,8 @@ let globalProductIndex = 0;
       gap: 5rem;
       display: flex;
       flex-direction: column;
+      isolation: isolate;
+      position: relative;
     }
 
     .product[data-reverse="true"] .product-content {
@@ -416,12 +418,12 @@ let globalProductIndex = 0;
     }
 
     .product-text-container {
-      /* No z-index - let children control stacking */
+      position: relative;
     }
 
     .product-title {
       position: sticky;
-      top: 72px;
+      top: 0;
       background: var(--color-gold);
       color: var(--color-bg-dark);
       z-index: 100;
