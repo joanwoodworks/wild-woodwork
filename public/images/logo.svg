@@ -3,7 +3,7 @@
     <!-- Tree trunk -->
     <line x1="100" y1="160" x2="100" y2="90" />
     <!-- Ground line -->
-    <line x1="60" y1="160" x2="140" y1="160" />
+    <line x1="60" y1="160" x2="140" y2="160" />
     <!-- Large crown (left side) -->
     <path d="M 100 50 Q 70 60 65 85 Q 65 110 85 120 Q 95 125 100 125" fill="none" />
     <!-- Small crown (right side) -->
