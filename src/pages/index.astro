@@ -433,19 +433,27 @@ let globalProductIndex = 0;
 
     .product-text {
       position: relative;
-      margin-bottom: 2rem;
+      margin-bottom: 4rem;
     }
 
     .product-images {
-      gap: 1.5rem;
-      margin-top: 5rem;
-      width: 100vw;
-      margin-left: -2rem;
-      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 3rem;
     }
 
     .product-image {
+      width: 100vw;
+      margin-left: -2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-image img {
       width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
       aspect-ratio: 4/5;
     }
 
