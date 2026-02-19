@@ -65,8 +65,8 @@ let globalProductIndex = 0;
                 <h3 class="product-title">{product.data.title}</h3>
                 <div class="product-text" data-speed="0.8">
                   <p class="product-description">{product.data.description}</p>
-                  {product.data.wood && <p class="product-meta">Wood: {product.data.wood}</p>}
-                  {product.data.dimensions && <p class="product-meta">Size: {product.data.dimensions}</p>}
+                  {product.data.wood && <p class="product-meta">Materjal: {product.data.wood}</p>}
+                  {product.data.dimensions && <p class="product-meta">Suurus: {product.data.dimensions}</p>}
                   {product.data.price && <p class="product-price">{product.data.price}</p>}
                 </div>
               </div>
@@ -421,7 +421,7 @@ let globalProductIndex = 0;
 
     .product-title {
       position: sticky;
-      top: 80px;
+      top: 72px;
       background: var(--color-gold);
       color: var(--color-bg-dark);
       z-index: 10;
