@@ -439,10 +439,6 @@ let globalProductIndex = 0;
       direction: ltr;
     }
 
-    .product-text-container {
-      padding: 2rem 0;
-    }
-
     .product-title-desktop {
       display: none;
     }
@@ -460,11 +456,12 @@ let globalProductIndex = 0;
       margin-left: -2rem;
       font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 300;
+      order: 1;
     }
 
     .product-text-container {
-      padding: 2rem 0;
-      padding-bottom: 100vh;
+      padding: 2rem;
+      order: 3;
     }
 
     .product-text {
@@ -478,6 +475,7 @@ let globalProductIndex = 0;
       gap: 0;
       position: relative;
       z-index: 10;
+      order: 2;
     }
 
     .product-image {
