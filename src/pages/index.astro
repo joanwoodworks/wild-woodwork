@@ -449,6 +449,8 @@ let globalProductIndex = 0;
 
     .product-text-container {
       padding: 2rem 0;
+      max-height: calc(100vh - 72px - 4rem);
+      overflow-y: auto;
     }
 
     .product-title-desktop {
@@ -614,7 +616,7 @@ let globalProductIndex = 0;
         const images = product.querySelector('.product-images') as HTMLElement;
 
         if (text && images) {
-          text.style.transform = `translateY(${rate * 0.3}px)`;
+          text.style.transform = `translateY(${-rate * 0.3}px)`;
           images.style.transform = `translateY(${-rate * 0.15}px)`;
         }
       }
