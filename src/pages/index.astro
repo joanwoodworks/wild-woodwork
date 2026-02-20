@@ -539,8 +539,8 @@ let globalProductIndex = 0;
   const burger = document.getElementById('burger');
   const navMenu = document.getElementById('nav-menu');
 
-  // Move menu to body to decouple from nav positioning
-  if (navMenu) {
+  // Move menu to body to decouple from nav positioning (mobile only)
+  if (navMenu && window.innerWidth <= 768) {
     document.body.appendChild(navMenu);
   }
 
