@@ -145,20 +145,12 @@ let globalProductIndex = 0;
 
   /* Navigation */
   .main-nav {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    transform: translateY(-100%);
     background: rgba(28, 58, 45, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
-    transition: transform 0.3s ease;
     box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-  }
-
-  .main-nav.visible {
-    transform: translateY(0);
   }
 
   .nav-container {
@@ -241,7 +233,6 @@ let globalProductIndex = 0;
   .product-section {
     min-height: 100vh;
     padding: 8rem 2rem;
-    margin-top: -72px;
   }
 
   .category-title {
