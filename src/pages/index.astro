@@ -320,7 +320,6 @@ let globalProductIndex = 0;
     width: 100%;
     aspect-ratio: 4/5;
     overflow: hidden;
-    border-radius: 4px;
   }
 
   .product-image img {
@@ -609,15 +608,20 @@ let globalProductIndex = 0;
       const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
       if (isVisible) {
-        const scrolled = window.innerHeight - rect.top;
-        const rate = scrolled * 0.3;
+        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
 
         const text = product.querySelector('.product-text') as HTMLElement;
         const images = product.querySelector('.product-images') as HTMLElement;
 
         if (text && images) {
-          text.style.transform = `translateY(${-rate * 0.3}px)`;
-          images.style.transform = `translateY(${-rate * 0.15}px)`;
+          // Text moves from +80px (bottom) to -80px (top) over scroll, but limit to prevent going under title
+          const textOffset = 80 - (clampedProgress * 160);
+          const limitedTextOffset = Math.max(-60, Math.min(80, textOffset));
+          text.style.transform = `translateY(${limitedTextOffset}px)`;
+
+          // Images move up less for parallax effect
+          images.style.transform = `translateY(${-clampedProgress * 60}px)`;
         }
       }
     });
