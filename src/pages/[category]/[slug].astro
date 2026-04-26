@@ -283,22 +283,17 @@ const allImages = [
 
   @media (max-width: 900px) {
     .product-layout {
-      grid-template-columns: 1fr;
-      gap: 3rem;
+      display: block;
       padding: 2rem 2rem 6rem;
     }
 
     .product-details {
       position: static;
-      order: -1;
-      min-width: 0;
-      width: 100%;
+      margin-bottom: 2rem;
     }
 
-    .gallery-image {
-      width: 100vw;
-      margin-left: -2rem;
-      aspect-ratio: 4/5;
+    .product-gallery {
+      gap: 1rem;
     }
   }
 </style>
