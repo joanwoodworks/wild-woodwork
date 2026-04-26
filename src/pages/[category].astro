@@ -1,0 +1,323 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import { getCollection } from 'astro:content';
+import { toSlug } from '../utils/slug';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  const categories = [...new Set(products.map(p => p.data.category))];
+  return categories.map(cat => ({
+    params: { category: toSlug(cat) },
+    props: {
+      categoryName: cat,
+      products: products
+        .filter(p => p.data.category === cat)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { categoryName, products } = Astro.props;
+const { category } = Astro.params;
+
+const allProducts = await getCollection('products');
+const categories = [...new Set(allProducts.map(p => p.data.category))];
+
+const settings = await import('../content/settings/general.json');
+---
+
+<Layout title={`${categoryName} — ${settings.title}`} description={settings.tagline}>
+  <Nav categories={categories} title={settings.title} />
+
+  <main class="category-page">
+    <div class="category-header">
+      <a href="/" class="back-link">← Tagasi</a>
+      <h1 class="category-title">{categoryName}</h1>
+    </div>
+
+    <div class="products-list">
+      {products.map((product, index) => {
+        const isEven = index % 2 === 0;
+        const categorySlug = toSlug(product.data.category);
+        return (
+          <a href={`/${categorySlug}/${product.slug}`} class="product-link">
+            <div class="product" data-reverse={!isEven}>
+              <div class="product-content">
+                <h3 class="product-title-mobile">{product.data.title}</h3>
+                <div class="product-text-container">
+                  <h3 class="product-title product-title-desktop">{product.data.title}</h3>
+                  <div class="product-text" data-speed="0.8">
+                    <p class="product-description">{product.data.description}</p>
+                    {product.data.price && <p class="product-price">{product.data.price}</p>}
+                    <span class="view-link">Vaata lähemalt →</span>
+                  </div>
+                </div>
+                <div class="product-images" data-speed="1.2">
+                  <div class="product-image">
+                    <img src={product.data.image} alt={product.data.title} loading="lazy" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --color-bg-dark: #1C3A2D;
+    --color-gold: #D4AF69;
+    --color-bg-light: #F5F2ED;
+    --color-text-dark: #2C2416;
+    --color-text-light: #666;
+  }
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--color-bg-light);
+  }
+
+  .category-page {
+    min-height: 100vh;
+  }
+
+  .category-header {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--color-bg-dark);
+    text-decoration: none;
+  }
+
+  .category-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-bg-dark);
+    margin: 0;
+  }
+
+  .products-list {
+    padding: 4rem 2rem 8rem;
+  }
+
+  .product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-link:hover {
+    text-decoration: none;
+  }
+
+  .product {
+    margin-bottom: 10rem;
+  }
+
+  .product-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .product[data-reverse="true"] .product-content {
+    direction: rtl;
+  }
+
+  .product[data-reverse="true"] .product-text-container,
+  .product[data-reverse="true"] .product-images {
+    direction: ltr;
+  }
+
+  .product-text-container {
+    position: sticky;
+    top: 150px;
+  }
+
+  .product-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: var(--color-bg-dark);
+    transition: color 0.2s;
+  }
+
+  .product-link:hover .product-title {
+    color: #2d6b4a;
+  }
+
+  .product-title-mobile {
+    display: none;
+  }
+
+  .product-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .view-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-bg-dark);
+    border-bottom: 1px solid var(--color-bg-dark);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .product-link:hover .view-link {
+    opacity: 0.6;
+  }
+
+  .product-images {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-image {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-link:hover .product-image img {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 768px) {
+    .products-list {
+      padding: 2rem 2rem 6rem;
+    }
+
+    .product {
+      margin-bottom: 5rem;
+    }
+
+    .product-content {
+      grid-template-columns: 1fr;
+      gap: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product[data-reverse="true"] .product-content {
+      direction: ltr;
+    }
+
+    .product-title-desktop {
+      display: none;
+    }
+
+    .product-title-mobile {
+      display: block;
+      position: sticky;
+      top: 72px;
+      background: var(--color-gold);
+      color: var(--color-bg-dark);
+      z-index: 100;
+      padding: 1rem 2rem;
+      width: 100vw;
+      margin-left: -2rem;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 300;
+      order: 1;
+    }
+
+    .product-text-container {
+      padding: 1.5rem 0;
+      order: 3;
+    }
+
+    .product-images {
+      order: 2;
+    }
+
+    .product-image {
+      width: 100vw;
+      margin-left: -2rem;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  function handleParallax() {
+    if (window.innerWidth <= 768) return;
+
+    document.querySelectorAll('.product').forEach(product => {
+      const rect = product.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        const clamped = Math.max(0, Math.min(1, scrollProgress));
+
+        const text = product.querySelector('.product-text') as HTMLElement;
+        const images = product.querySelector('.product-images') as HTMLElement;
+
+        if (text && images) {
+          const textOffset = Math.max(-60, Math.min(80, 80 - clamped * 160));
+          text.style.transform = `translateY(${textOffset}px)`;
+          images.style.transform = `translateY(${-clamped * 60}px)`;
+        }
+      }
+    });
+  }
+
+  window.addEventListener('scroll', handleParallax);
+  window.addEventListener('resize', handleParallax);
+  handleParallax();
+</script>

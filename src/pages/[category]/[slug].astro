@@ -1,0 +1,301 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import { getCollection } from 'astro:content';
+import { toSlug } from '../../utils/slug';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map(p => ({
+    params: { category: toSlug(p.data.category), slug: p.slug },
+    props: { product: p },
+  }));
+}
+
+const { product } = Astro.props;
+const { category } = Astro.params;
+
+const allProducts = await getCollection('products');
+const categories = [...new Set(allProducts.map(p => p.data.category))];
+
+const settings = await import('../../content/settings/general.json');
+
+const allImages = [
+  product.data.image,
+  ...(product.data.gallery?.map(g => g.image) ?? []),
+];
+---
+
+<Layout title={`${product.data.title} — ${settings.title}`} description={product.data.description}>
+  <Nav categories={categories} title={settings.title} />
+
+  <main class="product-page">
+    <div class="breadcrumb">
+      <a href="/">Avaleht</a>
+      <span>→</span>
+      <a href={`/${category}`}>{product.data.category}</a>
+      <span>→</span>
+      <span>{product.data.title}</span>
+    </div>
+
+    <div class="product-layout">
+      <div class="product-gallery">
+        {allImages.map((src, i) => (
+          <div class="gallery-image">
+            <img src={src} alt={`${product.data.title} — foto ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />
+          </div>
+        ))}
+      </div>
+
+      <aside class="product-details">
+        <h1 class="product-title">{product.data.title}</h1>
+        <p class="product-description">{product.data.description}</p>
+
+        {(product.data.wood || product.data.dimensions) && (
+          <div class="product-specs">
+            {product.data.wood && (
+              <div class="spec">
+                <span class="spec-label">Materjal</span>
+                <span class="spec-value">{product.data.wood}</span>
+              </div>
+            )}
+            {product.data.dimensions && (
+              <div class="spec">
+                <span class="spec-label">Mõõdud</span>
+                <span class="spec-value">{product.data.dimensions}</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {product.data.price && (
+          <p class="product-price">{product.data.price}</p>
+        )}
+
+        <div class="product-actions">
+          {product.data.available ? (
+            <a href="/#about" class="cta-button">Päri hinda</a>
+          ) : (
+            <span class="unavailable">Hetkel müüdud</span>
+          )}
+        </div>
+
+        <a href={`/${category}`} class="back-link">← {product.data.category}</a>
+      </aside>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --color-bg-dark: #1C3A2D;
+    --color-gold: #D4AF69;
+    --color-bg-light: #F5F2ED;
+    --color-text-dark: #2C2416;
+    --color-text-light: #666;
+  }
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--color-bg-light);
+  }
+
+  .product-page {
+    min-height: 100vh;
+  }
+
+  .breadcrumb {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 2rem 0;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-bg-dark);
+    text-decoration: none;
+  }
+
+  .breadcrumb span:last-child {
+    color: var(--color-text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .product-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem 8rem;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .gallery-image {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+  }
+
+  .gallery-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gallery-image:hover img {
+    transform: scale(1.03);
+  }
+
+  .product-details {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .product-title {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 300;
+    color: var(--color-bg-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+
+  .product-description {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text-light);
+  }
+
+  .product-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(44, 36, 22, 0.15);
+    border-bottom: 1px solid rgba(44, 36, 22, 0.15);
+    padding: 1.25rem 0;
+  }
+
+  .spec {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .spec-label {
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .spec-value {
+    color: var(--color-text-dark);
+    text-align: right;
+  }
+
+  .product-price {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    margin: 0;
+  }
+
+  .product-actions {
+    margin-top: 0.5rem;
+  }
+
+  .cta-button {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-bg-dark);
+    color: var(--color-gold);
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .cta-button:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  .unavailable {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: rgba(44, 36, 22, 0.1);
+    color: var(--color-text-light);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.95rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .back-link:hover {
+    color: var(--color-bg-dark);
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 2rem 2rem 6rem;
+    }
+
+    .product-details {
+      position: static;
+      order: -1;
+    }
+
+    .gallery-image {
+      width: 100vw;
+      margin-left: -2rem;
+      aspect-ratio: 4/5;
+    }
+  }
+</style>
