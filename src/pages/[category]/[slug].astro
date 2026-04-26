@@ -297,3 +297,33 @@ const allImages = [
     }
   }
 </style>
+
+<script>
+  function handleParallax() {
+    if (window.innerWidth <= 900) return;
+
+    const layout = document.querySelector('.product-layout') as HTMLElement;
+    if (!layout) return;
+
+    const rect = layout.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (isVisible) {
+      const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+      const clamped = Math.max(0, Math.min(1, progress));
+
+      const details = layout.querySelector('.product-details') as HTMLElement;
+      const gallery = layout.querySelector('.product-gallery') as HTMLElement;
+
+      if (details && gallery) {
+        const detailsOffset = Math.max(-60, Math.min(80, 80 - clamped * 160));
+        details.style.transform = `translateY(${detailsOffset}px)`;
+        gallery.style.transform = `translateY(${-clamped * 60}px)`;
+      }
+    }
+  }
+
+  window.addEventListener('scroll', handleParallax);
+  window.addEventListener('resize', handleParallax);
+  handleParallax();
+</script>
