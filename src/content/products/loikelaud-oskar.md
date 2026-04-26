@@ -1,16 +1,19 @@
 ---
-title: Lõikelaud Oskar
+title: Valminud lõikelauad
 category: Lõikelauad
-description: Erakordne käsitööna valmistatud "end-grain" lõikelaud, mis on hoolikalt kokku pandud kahest erinevast kvaliteetsest tammepuust. Igal puutüübil on oma unikaalne tekstuur ja värvitoon, mis loob kauneid visuaalseid mustreid. Laua sees peitub mahlarenn, mis annab talle lisaväärtust ja autentsust. Kaaludes 2 kilogrammi, on see piisavalt massiivne ja stabiilne igapäevaseks kasutamiseks. Iga laud on unikaalne käsitöö meistriteos, mis kannab endas looduslikku ilu ja mehelikkust.
-price: 75€
+description: Erinevad suured lõikelauad
+price: ""
 image: /images/products/img_8609.jpg
 gallery:
   - image: /images/products/img_8610.jpg
   - image: /images/products/img_8611.jpg
-dimensions: 40 cm x 25 cm
-wood: Kahte liiki tamm
+  - /images/products/capture0001-11.jpg
+  - /images/products/capture0001-4.jpg
+  - /images/products/capture0001-7.jpg
+dimensions: ""
+wood: ""
 featured: true
-available: true
+available: false
 date: 2026-02-15
 ---
 
