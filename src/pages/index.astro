@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import { getCollection } from 'astro:content';
-import { toSlug } from '../utils/slug';
 
 const allProducts = await getCollection('products');
 const categories = [...new Set(allProducts.map(p => p.data.category))];
@@ -14,17 +13,6 @@ const settings = await import('../content/settings/general.json');
   <!-- Hero Section -->
   <section class="hero" id="hero">
     <div class="hero-image" style={settings.hero_image ? `background-image: url(${settings.hero_image})` : ''}></div>
-    <div class="hero-overlay">
-      <div class="hero-content">
-        <h1 class="hero-title">{settings.title}</h1>
-        {settings.tagline && <p class="hero-tagline">{settings.tagline}</p>}
-        <div class="hero-links">
-          {categories.map(cat => (
-            <a href={`/${toSlug(cat)}`} class="hero-category-link">{cat}</a>
-          ))}
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- Sticky Navigation -->
@@ -87,14 +75,14 @@ const settings = await import('../content/settings/general.json');
 
   /* Hero */
   .hero {
-    height: 100vh;
+    height: calc(100vh - 72px);
     position: relative;
     overflow: hidden;
   }
 
   .hero-image {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -105,60 +93,6 @@ const settings = await import('../content/settings/general.json');
     .hero-image {
       background-attachment: scroll;
     }
-  }
-
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(28, 58, 45, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero-content {
-    text-align: center;
-    color: var(--color-bg-light);
-  }
-
-  .hero-title {
-    font-size: clamp(3rem, 8vw, 7rem);
-    font-weight: 300;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-gold);
-    margin-bottom: 1rem;
-  }
-
-  .hero-tagline {
-    font-size: clamp(1rem, 2vw, 1.3rem);
-    color: rgba(245, 242, 237, 0.85);
-    letter-spacing: 0.08em;
-    margin-bottom: 3rem;
-  }
-
-  .hero-links {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .hero-category-link {
-    padding: 0.75rem 2rem;
-    border: 1px solid var(--color-gold);
-    color: var(--color-gold);
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.9rem;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .hero-category-link:hover {
-    background: var(--color-gold);
-    color: var(--color-bg-dark);
-    text-decoration: none;
   }
 
   /* About */
