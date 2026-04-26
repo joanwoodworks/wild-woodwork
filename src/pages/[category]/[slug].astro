@@ -104,7 +104,7 @@ const allImages = [
 
   .product-page {
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .breadcrumb {
@@ -299,31 +299,36 @@ const allImages = [
 </style>
 
 <script>
-  function handleParallax() {
+  const STICKY_TOP = 100;
+  const BOTTOM_PAD = 32;
+
+  function syncDetails() {
     if (window.innerWidth <= 900) return;
 
     const layout = document.querySelector('.product-layout') as HTMLElement;
-    if (!layout) return;
+    const details = layout?.querySelector('.product-details') as HTMLElement;
+    if (!layout || !details) return;
 
-    const rect = layout.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    const availableH = window.innerHeight - STICKY_TOP - BOTTOM_PAD;
+    const detailsH = details.scrollHeight;
+    const overflow = detailsH - availableH;
 
-    if (isVisible) {
-      const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-      const clamped = Math.max(0, Math.min(1, progress));
-
-      const details = layout.querySelector('.product-details') as HTMLElement;
-      const gallery = layout.querySelector('.product-gallery') as HTMLElement;
-
-      if (details && gallery) {
-        const detailsOffset = Math.max(-60, Math.min(80, 80 - clamped * 160));
-        details.style.transform = `translateY(${detailsOffset}px)`;
-        gallery.style.transform = `translateY(${-clamped * 60}px)`;
-      }
+    if (overflow <= 0) {
+      // Text fits in viewport — sticky does the job, no transform needed
+      details.style.transform = '';
+      return;
     }
+
+    // Text taller than viewport — scroll text so both gallery and text end together
+    const layoutRect = layout.getBoundingClientRect();
+    const totalScroll = layout.offsetHeight - (window.innerHeight - STICKY_TOP);
+    const scrolled = STICKY_TOP - layoutRect.top;
+    const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+
+    details.style.transform = `translateY(${-progress * overflow}px)`;
   }
 
-  window.addEventListener('scroll', handleParallax);
-  window.addEventListener('resize', handleParallax);
-  handleParallax();
+  window.addEventListener('scroll', syncDetails, { passive: true });
+  window.addEventListener('resize', syncDetails);
+  syncDetails();
 </script>
