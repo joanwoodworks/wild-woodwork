@@ -7,9 +7,9 @@ image: /images/products/img_8609.jpg
 gallery:
   - image: /images/products/img_8610.jpg
   - image: /images/products/img_8611.jpg
-  - /images/products/capture0001-11.jpg
-  - /images/products/capture0001-4.jpg
-  - /images/products/capture0001-7.jpg
+  - image: /images/products/capture0001-11.jpg
+  - image: /images/products/capture0001-4.jpg
+  - image: /images/products/capture0001-7.jpg
 dimensions: ""
 wood: ""
 featured: true
